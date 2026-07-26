@@ -43,7 +43,26 @@ const login = async (req, res) => {
 
 };
 
+const getProfile = async (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        message: "Profile fetched successfully",
+        user: req.user,
+    });
+
+};
+
+const adminDashboard = (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Welcome Admin!",
+    });
+};
+
 module.exports = {
   register,
   login,
+  getProfile,
+  adminDashboard,
 };
