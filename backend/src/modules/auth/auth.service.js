@@ -26,6 +26,44 @@ const registerUser = async ({ name, email, password, role }) => {
   return userResponse;;
 };
 
+const loginUser = async ({ email, password }) => {
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new Error("Invalid email or password");
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(
+        password,
+        user.password
+    );
+
+    if (!isPasswordCorrect) {
+        throw new Error("Invalid email or password");
+    }
+
+    const token = jwt.sign(
+        {
+            id: user._id,
+            role: user.role,
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        }
+    );
+
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    return {
+        token,
+        user: userResponse,
+    };
+};
+
 module.exports = {
   registerUser,
+  loginUser,
 };
