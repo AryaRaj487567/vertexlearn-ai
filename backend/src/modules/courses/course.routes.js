@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { create,getAll,getById,update } = require("./course.controller");
+const { create,getAll,getById,update,remove } = require("./course.controller");
 
 const authMiddleware = require("../../middleware/auth.middleware");
 const roleMiddleware = require("../../middleware/role.middleware");
@@ -22,6 +22,13 @@ router.put(
     authMiddleware,
     roleMiddleware("instructor"),
     update
+);
+
+router.delete(
+    "/:id",
+    authMiddleware,
+    roleMiddleware("instructor"),
+    remove,
 );
 
 module.exports = router;

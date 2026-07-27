@@ -26,9 +26,14 @@ const updateCourse = async (id, courseData) => {
     );
 };
 
+const deleteCourse = async (id) => {
+    return await Course.findByIdAndDelete(id);
+};
+
 module.exports = {
     createCourse,
     getAllCourses,
     getCourseById,
     updateCourse,
+    deleteCourse,
 };

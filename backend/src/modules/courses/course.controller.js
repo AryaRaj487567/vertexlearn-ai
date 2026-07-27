@@ -2,6 +2,7 @@ const { createCourse,
         getAllCourses,
         getCourseById,
         updateCourse,
+        deleteCourse,
     } = require("./course.service");
 
 const create = async (req, res) => {
@@ -95,9 +96,34 @@ const update = async (req, res) => {
     }
 };
 
+const remove = async (req, res) => {
+    try {
+        const course = await deleteCourse(req.params.id);
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Course deleted successfully",
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+
+    }
+};
+
 module.exports = {
     create,
     getAll,
     getById,
     update,
+    remove,
 };
