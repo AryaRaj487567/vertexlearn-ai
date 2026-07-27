@@ -15,19 +15,30 @@ const getCourseById = async (id) => {
         .populate("instructor", "name email");
 };
 
-const updateCourse = async (id, courseData) => {
-    return await Course.findByIdAndUpdate(
-        id,
-        courseData,
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
+const updateCourse = async (courseId, instructorId, updateData) => {
+    const course = await Course.findById(courseId);
+    if (!course) {
+        throw new Error("Course not found");
+    }
+
+    if (course.instructor.toString() !== instructorId) {
+        throw new Error("Unauthorized");
+    }
+    Object.assign(course, updateData);
+    return await course.save();
 };
 
-const deleteCourse = async (id) => {
-    return await Course.findByIdAndDelete(id);
+const deleteCourse = async (courseId, instructorId) => {
+    const course = await Course.findById(courseId);
+    if (!course) {
+        throw new Error("Course not found");
+    }
+
+    if (course.instructor.toString() !== instructorId) {
+        throw new Error("Unauthorized");
+    }
+    await course.deleteOne();
+    return course;
 };
 
 module.exports = {

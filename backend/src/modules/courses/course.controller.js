@@ -72,14 +72,9 @@ const update = async (req, res) => {
     try {
         const course = await updateCourse(
             req.params.id,
+            req.user.id,
             req.body
         );
-        if (!course) {
-            return res.status(404).json({
-                success: false,
-                message: "Course not found",
-            });
-        }
         res.status(200).json({
             success: true,
             message: "Course updated successfully",
@@ -87,36 +82,53 @@ const update = async (req, res) => {
         });
 
     } catch (error) {
-
+        if (error.message === "Course not found") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+        if (error.message === "Unauthorized") {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to update this course.",
+            });
+        }
         res.status(500).json({
             success: false,
             message: error.message,
         });
-
     }
 };
 
 const remove = async (req, res) => {
     try {
-        const course = await deleteCourse(req.params.id);
-        if (!course) {
-            return res.status(404).json({
-                success: false,
-                message: "Course not found",
-            });
-        }
+        await deleteCourse(
+            req.params.id,
+            req.user.id
+        );
         res.status(200).json({
             success: true,
             message: "Course deleted successfully",
         });
 
     } catch (error) {
-
+        if (error.message === "Course not found") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+        if (error.message === "Unauthorized") {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to delete this course.",
+            });
+        }
         res.status(500).json({
             success: false,
             message: error.message,
         });
-
     }
 };
 
