@@ -5,9 +5,50 @@ const createCourse = async (courseData) => {
     return course;
 };
 
-const getAllCourses = async () => {
-    return await Course.find()
-        .populate("instructor", "name email");
+const getAllCourses = async (queryParams) => {
+
+    const {
+        search,
+        category,
+        level,
+        page = 1,
+        limit = 10,
+        sort = "createdAt",
+    } = queryParams;
+
+    const filter = {};
+
+    if (search) {
+        filter.title = {
+            $regex: search,
+            $options: "i",
+        };
+    }
+
+    if (category) {
+        filter.category = category;
+    }
+
+    if (level) {
+        filter.level = level;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const courses = await Course.find(filter)
+        .populate("instructor", "name email")
+        .sort(sort)
+        .skip(skip)
+        .limit(Number(limit));
+
+    const total = await Course.countDocuments(filter);
+
+    return {
+        courses,
+        total,
+        page: Number(page),
+        totalPages: Math.ceil(total / limit),
+    };
 };
 
 const getCourseById = async (id) => {

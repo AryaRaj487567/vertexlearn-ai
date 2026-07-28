@@ -30,17 +30,21 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const courses = await getAllCourses();
+
+        const result = await getAllCourses(req.query);
+
         res.status(200).json({
             success: true,
-            count: courses.length,
-            data: courses,
+            ...result,
         });
+
     } catch (error) {
+
         res.status(500).json({
             success: false,
             message: error.message,
         });
+
     }
 };
 
