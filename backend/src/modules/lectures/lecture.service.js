@@ -1,5 +1,6 @@
 const Lecture = require("./lecture.model");
 const Course = require("../courses/course.model");
+const { updateCourse } = require("../courses/course.service");
 
 const createLecture = async (courseId, instructorId, lectureData) => {
 
@@ -46,7 +47,6 @@ const getLectureById = async (lectureId) => {
     if (!lecture) {
         throw new Error("Lecture not found");
     }
-
     return lecture;
 };
 
