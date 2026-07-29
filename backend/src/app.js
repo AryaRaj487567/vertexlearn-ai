@@ -8,6 +8,10 @@ const enrollmentRoutes = require(
     "./modules/enrollments/enrollment.routes"
 );
 
+const lectureRoutes = require(
+    "./modules/lectures/lecture.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +24,11 @@ app.use("/api/v1/courses", courseRoutes);
 app.use(
     "/api/v1/enrollments",
     enrollmentRoutes
+);
+
+app.use(
+    "/api/v1/lectures",
+    lectureRoutes
 );
 
 app.get("/", (req, res) => {
