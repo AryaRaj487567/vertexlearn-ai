@@ -12,6 +12,10 @@ const lectureRoutes = require(
     "./modules/lectures/lecture.routes"
 );
 
+const progressRoutes = require(
+    "./modules/progress/progress.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -29,6 +33,11 @@ app.use(
 app.use(
     "/api/v1/lectures",
     lectureRoutes
+);
+
+app.use(
+    "/api/v1/progress",
+    progressRoutes
 );
 
 app.get("/", (req, res) => {
