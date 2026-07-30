@@ -16,6 +16,10 @@ const progressRoutes = require(
     "./modules/progress/progress.routes"
 );
 
+const assignmentRoutes = require(
+    "./modules/assignments/assignment.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -38,6 +42,11 @@ app.use(
 app.use(
     "/api/v1/progress",
     progressRoutes
+);
+
+app.use(
+    "/api/v1/assignments",
+    assignmentRoutes
 );
 
 app.get("/", (req, res) => {
