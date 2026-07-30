@@ -69,6 +69,72 @@ const markLectureCompleted = async (studentId, lectureId) => {
     };
 };
 
+const getCourseProgress = async (studentId, courseId) => {
+
+    const enrollment = await Enrollment.findOne({
+        student: studentId,
+        course: courseId,
+    });
+
+    if (!enrollment) {
+        throw new Error("Not enrolled");
+    }
+
+    const progress = await Progress.findOne({
+        student: studentId,
+        course: courseId,
+    });
+
+    const totalLectures = await Lecture.countDocuments({
+        course: courseId,
+    });
+
+    const completedLectures = progress
+        ? progress.completedLectures.length
+        : 0;
+
+    return {
+        courseId,
+        completedLectures,
+        totalLectures,
+        progress: enrollment.progress,
+        completed: enrollment.completed,
+    };
+};
+
+const continueLearning = async (studentId, courseId) => {
+
+    const enrollment = await Enrollment.findOne({
+        student: studentId,
+        course: courseId,
+    });
+
+    if (!enrollment) {
+        throw new Error("Not enrolled");
+    }
+
+    const progress = await Progress.findOne({
+        student: studentId,
+        course: courseId,
+    });
+
+    const completedIds = progress
+        ? progress.completedLectures.map(id => id.toString())
+        : [];
+
+    const lectures = await Lecture.find({
+        course: courseId,
+    }).sort({ order: 1 });
+
+    const nextLecture = lectures.find(
+        lecture => !completedIds.includes(lecture._id.toString())
+    );
+
+    return nextLecture || null;
+};
+
 module.exports = {
     markLectureCompleted,
+    getCourseProgress,
+    continueLearning,
 };
