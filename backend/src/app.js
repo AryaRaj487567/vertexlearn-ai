@@ -20,6 +20,10 @@ const assignmentRoutes = require(
     "./modules/assignments/assignment.routes"
 );
 
+const quizRoutes = require(
+    "./modules/quizzes/quiz.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -47,6 +51,11 @@ app.use(
 app.use(
     "/api/v1/assignments",
     assignmentRoutes
+);
+
+app.use(
+    "/api/v1/quizzes",
+    quizRoutes
 );
 
 app.get("/", (req, res) => {
