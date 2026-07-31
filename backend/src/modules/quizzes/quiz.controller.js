@@ -2,6 +2,7 @@ const {
     createQuiz,
     getQuizzesByCourse,
     attemptQuiz,
+    getQuizResult,
 } = require("./quiz.service");
 
 const create = async (req, res) => {
@@ -113,8 +114,41 @@ const attempt = async (req, res) => {
     }
 };
 
+const getResult = async (req, res) => {
+
+    try {
+        const result = await getQuizResult(
+            req.params.quizId,
+            req.user.id
+        );
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+
+    } catch (error) {
+        if (error.message === "Quiz not found") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+        if (error.message === "Quiz not attempted") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     create,
     getByCourse,
     attempt,
+    getResult,
 };

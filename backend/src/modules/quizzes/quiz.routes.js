@@ -6,6 +6,7 @@ const {
     create,
     getByCourse,
     attempt,
+    getResult,
 } = require("./quiz.controller");
 
 const authMiddleware = require("../../middleware/auth.middleware");
@@ -29,6 +30,13 @@ router.post(
     authMiddleware,
     roleMiddleware("student"),
     attempt
+);
+
+router.get(
+    "/:quizId/result",
+    authMiddleware,
+    roleMiddleware("student"),
+    getResult
 );
 
 module.exports = router;

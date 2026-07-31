@@ -112,8 +112,34 @@ const attemptQuiz = async (
 
 };
 
+const getQuizResult = async (quizId, studentId) => {
+
+    const quiz = await Quiz.findById(quizId);
+
+    if (!quiz) {
+        throw new Error("Quiz not found");
+    }
+
+    const attempt = await QuizAttempt.findOne({
+        quiz: quizId,
+        student: studentId,
+    });
+
+    if (!attempt) {
+        throw new Error("Quiz not attempted");
+    }
+
+    return {
+        quizTitle: quiz.title,
+        score: attempt.score,
+        totalMarks: quiz.totalMarks,
+        submittedAt: attempt.submittedAt,
+    };
+};
+
 module.exports = {
     createQuiz,
     getQuizzesByCourse,
     attemptQuiz,
+    getQuizResult,
 };
