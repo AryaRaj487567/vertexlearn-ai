@@ -32,6 +32,10 @@ const gamificationRoutes = require(
     "./modules/gamification/gamification.routes"
 );
 
+const discussionRoutes = require(
+    "./modules/discussions/discussion.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -74,6 +78,11 @@ app.use(
 app.use(
     "/api/v1/gamification",
     gamificationRoutes
+);
+
+app.use(
+    "/api/v1/discussions",
+    discussionRoutes
 );
 
 app.get("/", (req, res) => {
