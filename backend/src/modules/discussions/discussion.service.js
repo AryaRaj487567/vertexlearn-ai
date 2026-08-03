@@ -136,8 +136,56 @@ const replyToDiscussion = async (
 
 };
 
+const updateDiscussion = async (
+    discussionId,
+    userId,
+    discussionData
+) => {
+
+    const discussion = await Discussion.findById(discussionId);
+
+    if (!discussion) {
+        throw new Error("Discussion not found");
+    }
+
+    if (discussion.author.toString() !== userId) {
+        throw new Error("Unauthorized");
+    }
+
+    discussion.title = discussionData.title || discussion.title;
+    discussion.content = discussionData.content || discussion.content;
+
+    await discussion.save();
+
+    return await Discussion.findById(discussionId)
+        .populate("author", "name email")
+        .populate("replies.user", "name email");
+};
+
+const deleteDiscussion = async (
+    discussionId,
+    userId
+) => {
+
+    const discussion = await Discussion.findById(discussionId);
+
+    if (!discussion) {
+        throw new Error("Discussion not found");
+    }
+
+    if (discussion.author.toString() !== userId) {
+        throw new Error("Unauthorized");
+    }
+
+    await Discussion.findByIdAndDelete(discussionId);
+
+    return;
+};
+
 module.exports = {
     createDiscussion,
     getDiscussionsByCourse,
     replyToDiscussion,
+    updateDiscussion,
+    deleteDiscussion,
 };

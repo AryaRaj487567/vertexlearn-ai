@@ -2,6 +2,8 @@ const {
     createDiscussion,
     getDiscussionsByCourse,
     replyToDiscussion,
+    updateDiscussion,
+    deleteDiscussion,
 } = require("./discussion.service");
 
 const create = async (req, res) => {
@@ -118,8 +120,80 @@ const reply = async (req, res) => {
     }
 };
 
+const update = async (req, res) => {
+
+    try {
+        const discussion =
+            await updateDiscussion(
+                req.params.discussionId,
+                req.user.id,
+                req.body
+            );
+        res.status(200).json({
+            success: true,
+            message: "Discussion updated successfully",
+            data: discussion,
+        });
+
+    } catch (error) {
+
+        if (
+            [
+                "Discussion not found",
+                "Unauthorized",
+            ].includes(error.message)
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const remove = async (req, res) => {
+
+    try {
+        await deleteDiscussion(
+            req.params.discussionId,
+            req.user.id
+        );
+        res.status(200).json({
+            success: true,
+            message: "Discussion deleted successfully",
+        });
+
+    } catch (error) {
+        if (
+            [
+                "Discussion not found",
+                "Unauthorized",
+            ].includes(error.message)
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     create,
     getByCourse,
     reply,
+    update,
+    remove,
 };

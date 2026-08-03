@@ -6,6 +6,8 @@ const {
     create,
     getByCourse,
     reply,
+    update,
+    remove,
 } = require("./discussion.controller");
 
 const authMiddleware = require("../../middleware/auth.middleware");
@@ -26,6 +28,18 @@ router.post(
     "/:discussionId/reply",
     authMiddleware,
     reply
+);
+
+router.put(
+    "/:discussionId",
+    authMiddleware,
+    update
+);
+
+router.delete(
+    "/:discussionId",
+    authMiddleware,
+    remove
 );
 
 module.exports = router;
