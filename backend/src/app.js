@@ -24,6 +24,10 @@ const quizRoutes = require(
     "./modules/quizzes/quiz.routes"
 );
 
+const certificateRoutes = require(
+    "./modules/certificates/certificate.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -56,6 +60,11 @@ app.use(
 app.use(
     "/api/v1/quizzes",
     quizRoutes
+);
+
+app.use(
+    "/api/v1/certificates",
+    certificateRoutes
 );
 
 app.get("/", (req, res) => {
