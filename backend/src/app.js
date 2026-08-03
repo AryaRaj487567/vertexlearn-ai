@@ -28,6 +28,10 @@ const certificateRoutes = require(
     "./modules/certificates/certificate.routes"
 );
 
+const gamificationRoutes = require(
+    "./modules/gamification/gamification.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -65,6 +69,11 @@ app.use(
 app.use(
     "/api/v1/certificates",
     certificateRoutes
+);
+
+app.use(
+    "/api/v1/gamification",
+    gamificationRoutes
 );
 
 app.get("/", (req, res) => {
