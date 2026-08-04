@@ -40,6 +40,10 @@ const notificationRoutes = require(
     "./modules/notifications/notification.routes"
 );
 
+const adminRoutes = require(
+    "./modules/admin/admin.routes"
+);
+
 const app = express();
 
 app.use(cors());
@@ -92,6 +96,11 @@ app.use(
 app.use(
     "/api/v1/notifications",
     notificationRoutes
+);
+
+app.use(
+    "/api/v1/admin",
+    adminRoutes
 );
 
 app.get("/", (req, res) => {

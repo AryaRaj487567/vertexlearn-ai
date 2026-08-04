@@ -1,0 +1,78 @@
+const {
+    getDashboard,
+    getAllUsers,
+    deleteUser,
+} = require("./admin.service");
+
+const dashboard = async (req, res) => {
+
+    try {
+        const stats = await getDashboard();
+
+        res.status(200).json({
+            success: true,
+            data: stats,
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const getUsers = async (req, res) => {
+
+    try {
+        const users = await getAllUsers();
+        res.status(200).json({
+            success: true,
+            count: users.length,
+            data: users,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const removeUser = async (req, res) => {
+
+    try {
+        await deleteUser(
+            req.params.userId
+        );
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+        });
+
+    } catch (error) {
+        if (
+            [
+                "User not found",
+                "Cannot delete admin user",
+            ].includes(error.message)
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+            });
+
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+module.exports = {
+    dashboard,
+    getUsers,
+    removeUser,
+};
