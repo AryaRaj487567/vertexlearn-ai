@@ -8,6 +8,7 @@ const {
     removeUser,
     getCourses,
     removeCourse,
+    analytics,
 } = require("./admin.controller");
 
 const authMiddleware = require("../../middleware/auth.middleware");
@@ -46,6 +47,13 @@ router.delete(
     authMiddleware,
     roleMiddleware("admin"),
     removeCourse
+);
+
+router.get(
+    "/analytics",
+    authMiddleware,
+    roleMiddleware("admin"),
+    analytics
 );
 
 module.exports = router;

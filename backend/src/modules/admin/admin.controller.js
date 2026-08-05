@@ -4,6 +4,7 @@ const {
     deleteUser,
     getAllCourses,
     deleteCourse,
+    getAnalytics,
 } = require("./admin.service");
 
 const dashboard = async (req, res) => {
@@ -118,10 +119,33 @@ const removeCourse = async (req, res) => {
     }
 };
 
+const analytics = async (req, res) => {
+
+    try {
+
+        const data = await getAnalytics();
+
+        res.status(200).json({
+            success: true,
+            data,
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+
+    }
+
+};
+
 module.exports = {
     dashboard,
     getUsers,
     removeUser,
     getCourses,
     removeCourse,
+    analytics,
 };

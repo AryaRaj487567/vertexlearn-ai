@@ -2,6 +2,7 @@ const User = require("../users/user.model");
 const Course = require("../courses/course.model");
 const Enrollment = require("../enrollments/enrollment.model");
 const Certificate = require("../certificates/certificate.model");
+const Gamification = require("../gamification/gamification.model");
 //const { getAllCourses } = require("../courses/course.service"); 
 const getDashboard = async () => {
 
@@ -77,10 +78,57 @@ const deleteCourse = async (courseId) => {
 
 };
 
+const getAnalytics = async () => {
+
+    const [
+        totalUsers,
+        students,
+        instructors,
+        admins,
+        totalCourses,
+        totalEnrollments,
+        totalCertificates
+    ] = await Promise.all([
+        User.countDocuments(),
+        User.countDocuments({ role: "student" }),
+        User.countDocuments({ role: "instructor" }),
+        User.countDocuments({ role: "admin" }),
+        Course.countDocuments(),
+        Enrollment.countDocuments(),
+        Certificate.countDocuments()
+    ]);
+
+    const topStudents = await Gamification.find()
+        .populate("student", "name email")
+        .sort({ xp: -1 })
+        .limit(5);
+
+    return {
+        users: {
+            total: totalUsers,
+            students,
+            instructors,
+            admins,
+        },
+        courses: {
+            total: totalCourses,
+        },
+        enrollments: {
+            total: totalEnrollments,
+        },
+        certificates: {
+            total: totalCertificates,
+        },
+        topStudents,
+    };
+
+};
+
 module.exports = {
     getDashboard,
     getAllUsers,
     deleteUser,
     getAllCourses,
     deleteCourse,
+    getAnalytics,
 };
