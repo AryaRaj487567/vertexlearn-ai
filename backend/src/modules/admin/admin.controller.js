@@ -2,6 +2,8 @@ const {
     getDashboard,
     getAllUsers,
     deleteUser,
+    getAllCourses,
+    deleteCourse,
 } = require("./admin.service");
 
 const dashboard = async (req, res) => {
@@ -71,8 +73,55 @@ const removeUser = async (req, res) => {
     }
 };
 
+const getCourses = async (req, res) => {
+
+    try {
+        const courses = await getAllCourses();
+        res.status(200).json({
+            success: true,
+            count: courses.length,
+            data: courses,
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const removeCourse = async (req, res) => {
+
+    try {
+        await deleteCourse(
+            req.params.courseId
+        );
+        res.status(200).json({
+            success: true,
+            message: "Course deleted successfully",
+        });
+
+    } catch (error) {
+
+        if (error.message === "Course not found") {
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+
+        }
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     dashboard,
     getUsers,
     removeUser,
+    getCourses,
+    removeCourse,
 };

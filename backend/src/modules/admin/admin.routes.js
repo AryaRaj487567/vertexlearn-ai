@@ -6,6 +6,8 @@ const {
     dashboard,
     getUsers,
     removeUser,
+    getCourses,
+    removeCourse,
 } = require("./admin.controller");
 
 const authMiddleware = require("../../middleware/auth.middleware");
@@ -30,6 +32,20 @@ router.delete(
     authMiddleware,
     roleMiddleware("admin"),
     removeUser
+);
+
+router.get(
+    "/courses",
+    authMiddleware,
+    roleMiddleware("admin"),
+    getCourses
+);
+
+router.delete(
+    "/courses/:courseId",
+    authMiddleware,
+    roleMiddleware("admin"),
+    removeCourse
 );
 
 module.exports = router;

@@ -2,8 +2,7 @@ const User = require("../users/user.model");
 const Course = require("../courses/course.model");
 const Enrollment = require("../enrollments/enrollment.model");
 const Certificate = require("../certificates/certificate.model");
-const { getAllCourses } = require("../courses/course.service");
-
+//const { getAllCourses } = require("../courses/course.service"); 
 const getDashboard = async () => {
 
     const [
@@ -53,8 +52,35 @@ const deleteUser = async (userId) => {
 
 };
 
+const getAllCourses = async () => {
+
+    const courses = await Course.find()
+        .populate(
+            "instructor",
+            "name email"
+        )
+        .sort({ createdAt: -1 });
+
+    return courses;
+
+};
+
+const deleteCourse = async (courseId) => {
+
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+        throw new Error("Course not found");
+    }
+
+    await Course.findByIdAndDelete(courseId);
+
+};
+
 module.exports = {
     getDashboard,
     getAllUsers,
     deleteUser,
+    getAllCourses,
+    deleteCourse,
 };
