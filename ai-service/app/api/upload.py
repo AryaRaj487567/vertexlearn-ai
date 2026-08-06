@@ -4,6 +4,8 @@ from app.services.pdf_service import (
     extract_text_from_pdf,
     create_chunks,
 )
+from app.services.embedding_service import generate_embeddings
+from app.services.faiss_service import save_embeddings
 import os
 import shutil
 
@@ -35,10 +37,18 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     chunks = create_chunks(extracted_text)
 
+    embeddings = generate_embeddings(chunks)
+
+    stored_chunks = save_embeddings(
+    chunks,
+    embeddings
+)
+
     return {
     "success": True,
     "filename": file.filename,
     "characters": len(extracted_text),
-    "chunks": len(chunks),
-    "first_chunk": chunks[0]
+    "chunks": stored_chunks,
+    "embedding_dimension": embeddings.shape[1],
+    "message": "PDF indexed successfully"
 }
