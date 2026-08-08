@@ -7,6 +7,6 @@ langchain-text-splitters
 sentence-transformers
 faiss-cpu
 pymupdf
-google-generativeai
+google-genai
 pydantic
 python-multipart
