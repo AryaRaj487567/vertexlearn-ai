@@ -44,6 +44,8 @@ const adminRoutes = require(
     "./modules/admin/admin.routes"
 );
 
+const aiRoutes = require("./modules/ai/ai.routes");
+
 const app = express();
 
 app.use(cors());
@@ -101,6 +103,11 @@ app.use(
 app.use(
     "/api/v1/admin",
     adminRoutes
+);
+
+app.use(
+    "/api/v1/ai",
+    aiRoutes
 );
 
 app.get("/", (req, res) => {
