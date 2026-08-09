@@ -11,6 +11,7 @@ router = APIRouter()
 class ChatRequest(BaseModel):
     question: str
     top_k: int = 3
+    user_id: str | None = None
 
 
 @router.post("/chat")
