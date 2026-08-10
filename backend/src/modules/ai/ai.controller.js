@@ -1,12 +1,18 @@
 const { askAI } = require("../../services/ai.service");
 const Chat = require("./chat.model");
+const Enrollment = require("../enrollments/enrollment.model");
 
 const chat = async (req, res) => {
 
     try {
-        const { question, top_k } = req.body;
+        const {
+        question,
+        top_k,
+        course_id,
+        lecture_id,
+    } = req.body;
 
-        const userId = req.user.id;
+    const userId = req.user.id;
 
         if (!question || !question.trim()) {
             return res.status(400).json({
@@ -15,14 +21,44 @@ const chat = async (req, res) => {
             });
         }
 
+        if (!course_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Course ID is required",
+            });
+        }
+
+        if (!lecture_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Lecture ID is required",
+            });
+        }
+
+        const enrollment = await Enrollment.findOne({
+            student: userId,
+            course: course_id,
+        });
+
+        if (!enrollment) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not enrolled in this course",
+            });
+        }
+
         const result = await askAI(
             question,
             top_k || 3,
             userId,
+            course_id,
+            lecture_id
         );
 
         const savedChat = await Chat.create({
             user: userId,
+            course: course_id,
+            lecture: lecture_id,
             question: question,
             answer: result.answer,
             sources: result.sources || [],

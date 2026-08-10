@@ -12,7 +12,8 @@ class ChatRequest(BaseModel):
     question: str
     top_k: int = 3
     user_id: str | None = None
-
+    course_id: str | None = None
+    lecture_id: str | None = None
 
 @router.post("/chat")
 async def chat(request: ChatRequest):
@@ -28,7 +29,9 @@ async def chat(request: ChatRequest):
         # Retrieve relevant chunks from FAISS
         results = search_chunks(
             request.question,
-            request.top_k
+            request.top_k,
+            request.course_id,
+            request.lecture_id
         )
 
         # Combine retrieved chunks into context

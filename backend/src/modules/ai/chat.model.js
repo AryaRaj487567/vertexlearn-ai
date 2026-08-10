@@ -8,6 +8,18 @@ const chatSchema = new mongoose.Schema(
             required: true,
         },
 
+        course: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Course",
+            required: true,
+        },
+
+        lecture: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Lecture",
+            required: true,
+        },
+
         question: {
             type: String,
             required: true,

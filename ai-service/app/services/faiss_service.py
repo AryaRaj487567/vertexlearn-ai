@@ -7,8 +7,12 @@ VECTOR_FOLDER = "vectors"
 
 os.makedirs(VECTOR_FOLDER, exist_ok=True)
 
-
-def save_embeddings(chunks, embeddings):
+def save_embeddings(
+    chunks,
+    embeddings,
+    course_id,
+    lecture_id
+):
 
     dimension = embeddings.shape[1]
 
@@ -26,14 +30,27 @@ def save_embeddings(chunks, embeddings):
         )
     )
 
+    metadata = []
+
+    for chunk in chunks:
+
+        metadata.append({
+            "chunk": chunk,
+            "course_id": course_id,
+            "lecture_id": lecture_id
+        })
+
     with open(
         os.path.join(
             VECTOR_FOLDER,
             "chunks.pkl"
         ),
-        "wb",
+        "wb"
     ) as file:
 
-        pickle.dump(chunks, file)
+        pickle.dump(
+            metadata,
+            file
+        )
 
     return len(chunks)
