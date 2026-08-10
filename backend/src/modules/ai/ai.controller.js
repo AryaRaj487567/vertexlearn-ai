@@ -1,14 +1,12 @@
 const { askAI } = require("../../services/ai.service");
-
+const Chat = require("./chat.model");
 
 const chat = async (req, res) => {
 
     try {
-
         const { question, top_k } = req.body;
 
         const userId = req.user.id;
-        console.log("Authenticated user ID:", userId);
 
         if (!question || !question.trim()) {
             return res.status(400).json({
@@ -22,6 +20,13 @@ const chat = async (req, res) => {
             top_k || 3,
             userId,
         );
+
+        const savedChat = await Chat.create({
+            user: userId,
+            question: question,
+            answer: result.answer,
+            sources: result.sources || [],
+        });
 
         res.status(200).json(result);
 
@@ -42,7 +47,38 @@ const chat = async (req, res) => {
 
 };
 
+const getChatHistory = async (req, res) => {
+
+    try {
+        const userId = req.user.id;
+
+        const chats = await Chat.find({
+            user: userId,
+        })
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            count: chats.length,
+            chats,
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get Chat History Error:",
+            error.message
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch chat history",
+        });
+    }
+};
+
 
 module.exports = {
     chat,
+    getChatHistory,
 };

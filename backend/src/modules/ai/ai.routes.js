@@ -6,6 +6,7 @@ const authMiddleware = require("../../middleware/auth.middleware");
 
 const {
     chat,
+    getChatHistory,
 } = require("./ai.controller");
 
 
@@ -13,6 +14,12 @@ router.post(
     "/chat",
     authMiddleware,
     chat
+);
+
+router.get(
+    "/history",
+    authMiddleware,
+    getChatHistory
 );
 
 
