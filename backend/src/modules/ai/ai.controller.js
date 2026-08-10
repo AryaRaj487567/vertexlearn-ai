@@ -48,23 +48,46 @@ const chat = async (req, res) => {
 };
 
 const getChatHistory = async (req, res) => {
-
     try {
         const userId = req.user.id;
 
-        const chats = await Chat.find({
-            user: userId,
-        })
-            .sort({ createdAt: -1 });
+        const page = Math.max(
+            parseInt(req.query.page) || 1,
+            1
+        );
+
+        const limit = Math.min(
+            Math.max(
+                parseInt(req.query.limit) || 10,
+                1
+            ),
+            50
+        );
+
+        const skip = (page - 1) * limit;
+
+        const [chats, total] = await Promise.all([
+            Chat.find({ user: userId })
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit),
+
+            Chat.countDocuments({
+                user: userId,
+            }),
+        ]);
 
         return res.status(200).json({
             success: true,
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
             count: chats.length,
             chats,
         });
 
     } catch (error) {
-
         console.error(
             "Get Chat History Error:",
             error.message
