@@ -1,6 +1,7 @@
 const { askAI } = require("../../services/ai.service");
 const Chat = require("./chat.model");
 const Enrollment = require("../enrollments/enrollment.model");
+const Course = require("../courses/course.model");
 
 const chat = async (req, res) => {
 
@@ -40,7 +41,21 @@ const chat = async (req, res) => {
             course: course_id,
         });
 
-        if (!enrollment) {
+        const course = await Course.findById(course_id);
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+
+        const isInstructor =
+            course.instructor.toString() === userId.toString();
+
+        const isAdmin = req.user.role === "admin";
+
+        if (!enrollment && !isInstructor && !isAdmin) {
             return res.status(403).json({
                 success: false,
                 message: "You are not enrolled in this course",
