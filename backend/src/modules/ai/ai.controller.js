@@ -1,10 +1,18 @@
+const mongoose = require("mongoose");
 const { askAI } = require("../../services/ai.service");
 const Chat = require("./chat.model");
 const Enrollment = require("../enrollments/enrollment.model");
 const Course = require("../courses/course.model");
 
 const chat = async (req, res) => {
-
+    console.log("========== AI REQUEST ==========");
+    console.log("BODY:", req.body);
+    console.log("course_id:", req.body.course_id);
+    console.log("lecture_id:", req.body.lecture_id);
+    console.log(
+        "lecture_id length:",
+        req.body.lecture_id?.length
+    );
     try {
         const {
         question,

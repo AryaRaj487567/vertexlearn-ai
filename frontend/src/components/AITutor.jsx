@@ -1,4 +1,6 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import "./AITutor.css";
 
 function AITutor({ courseId, lectureId }) {
     const [question, setQuestion] = useState("");
@@ -8,112 +10,338 @@ function AITutor({ courseId, lectureId }) {
     const [error, setError] = useState("");
 
     const askQuestion = async () => {
-        console.log("courseId:", courseId);
-        console.log("lectureId:", lectureId);
-        if (!question.trim()) {
-            setError("Please enter a question.");
-            return;
+    if (!question.trim()) {
+        setError("Please enter a question first.");
+        return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+        const storedToken = localStorage.getItem("token");
+
+        if (!storedToken) {
+            throw new Error("Please login first.");
         }
 
-        setLoading(true);
-        setError("");
-        setAnswer("");
-        setSources([]);
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/v1/ai/chat",
+            {
+                method: "POST",
 
-        try {
-            // Get JWT token saved after login
-            const token = localStorage.getItem("token");
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${storedToken}`,
+                },
 
-            if (!token) {
-                throw new Error("Please login first.");
+                body: JSON.stringify({
+                    question: question.trim(),
+                    top_k: 3,
+                    course_id: courseId,
+                    lecture_id: lectureId,
+                }),
             }
+        );
 
-            const response = await fetch(
-                "http://localhost:5000/api/v1/ai/chat",
-                {
-                    method: "POST",
+        const data = await response.json();
 
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
+        console.log("AI response:", data);
 
-                    body: JSON.stringify({
-                        question: question.trim(),
-                        top_k: 3,
-                        course_id: courseId,
-                        lecture_id: lectureId,
-                    }),
-                }
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Unable to get AI response."
             );
+        }
 
-            const data = await response.json();
+        setAnswer(data.answer || "");
+        setSources(data.sources || []);
 
-            if (!response.ok) {
-                throw new Error(
-                    data.message ||
-                    data.error ||
-                    "Failed to get AI response"
-                );
-            }
+    } catch (err) {
+        console.error("AI Tutor Error:", err);
+        setError(err.message || "AI service request failed.");
+    } finally {
+        setLoading(false);
+    }
+};
 
-            setAnswer(data.answer || "");
-            setSources(data.sources || []);
-
-        } catch (err) {
-            console.error("AI Tutor Error:", err);
-            setError(err.message);
-        } finally {
-            setLoading(false);
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && e.ctrlKey) {
+            askQuestion();
         }
     };
 
     return (
-        <div className="ai-tutor">
-            <h2>AI Tutor</h2>
+        <section className="ai-tutor-wrapper">
 
-            <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="Ask something about this lecture..."
-                rows={4}
-            />
+            {/* Header */}
+            <div className="ai-header">
+                <div className="ai-icon">
+                    ✦
+                </div>
 
-            <button
-                onClick={askQuestion}
-                disabled={loading}
-            >
-                {loading ? "Thinking..." : "Ask AI"}
-            </button>
+                <div>
+                    <span className="ai-label">
+                        VERTEXLEARN AI
+                    </span>
 
+                    <h1>AI Tutor</h1>
+
+                    <p>
+                        Your intelligent learning companion for
+                        understanding course material.
+                    </p>
+                </div>
+            </div>
+
+            {/* Question Box */}
+            <div className="question-card">
+
+                <div className="question-top">
+                    <span>Ask your question</span>
+
+                    <span className="shortcut">
+                        Ctrl + Enter
+                    </span>
+                </div>
+
+                <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask anything about this lecture..."
+                    maxLength={500}
+                />
+
+                <div className="question-bottom">
+
+                    <span className="character-count">
+                        {question.length}/500
+                    </span>
+
+                    <button
+                        className="ask-button"
+                        onClick={askQuestion}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner"></span>
+                                Thinking...
+                            </>
+                        ) : (
+                            <>
+                                Ask AI
+                                <span className="arrow">→</span>
+                            </>
+                        )}
+                    </button>
+
+                </div>
+            </div>
+
+            {/* Error */}
             {error && (
-                <p className="ai-error">
+                <div className="ai-error">
+                    <span>!</span>
                     {error}
-                </p>
-            )}
-
-            {answer && (
-                <div className="ai-answer">
-                    <h3>Answer</h3>
-                    <p>{answer}</p>
                 </div>
             )}
 
-            {sources.length > 0 && (
-                <div className="ai-sources">
-                    <h3>Sources</h3>
+            {/* Loading */}
+            {loading && (
+                <div className="loading-card">
 
-                    {sources.map((source, index) => (
-                        <div
-                            key={index}
-                            className="ai-source"
-                        >
-                            <p>{source.chunk}</p>
+                    <div className="loading-icon">
+                        ✦
+                    </div>
+
+                    <div>
+                        <strong>AI is thinking...</strong>
+                        <p>
+                            Searching your course material for the
+                            best answer.
+                        </p>
+                    </div>
+
+                    <div className="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+            )}
+
+            {/* Answer */}
+            {answer && !loading && (
+                <div className="answer-section">
+
+                    <div className="section-heading">
+                        <div className="heading-icon">
+                            ✦
                         </div>
-                    ))}
+
+                        <div>
+                            <span>AI RESPONSE</span>
+                            <h2>Answer</h2>
+                        </div>
+                    </div>
+
+                    <div className="answer-card">
+
+                        <div className="answer-glow"></div>
+
+                        <ReactMarkdown>
+                            {answer}
+                        </ReactMarkdown>
+
+                    </div>
                 </div>
             )}
-        </div>
+
+            {/* Sources */}
+            {sources.length > 0 && !loading && (
+                <div className="sources-section">
+
+                    <div className="section-heading">
+                        <div className="heading-icon source-icon">
+                            ◈
+                        </div>
+
+                        <div>
+                            <span>KNOWLEDGE CONTEXT</span>
+                            <h2>Sources</h2>
+                        </div>
+                    </div>
+
+                    <div className="sources-grid">
+
+                        {sources.map((source, index) => {
+
+                    const cleanChunk = source.chunk
+                        ?.replace(/\+?\d[\d\s-]{8,}\d/g, "[contact information]")
+                        .replace(
+                            /[\w.-]+@[\w.-]+\.\w+/g,
+                            "[email]"
+                        )
+                        .replace(
+                            /(https?:\/\/|www\.)\S+/gi,
+                            "[link]"
+                        );
+
+                    const preview =
+                        cleanChunk?.length > 260
+                            ? cleanChunk.substring(0, 260) + "..."
+                            : cleanChunk;
+
+                    return (
+                        <div
+                            className="source-card"
+                            key={index}
+                        >
+
+                            <div className="source-top">
+
+                                <div className="source-number">
+                                    {String(index + 1).padStart(2, "0")}
+                                </div>
+
+                                <span className="source-badge">
+                                    COURSE MATERIAL
+                                </span>
+
+                            </div>
+
+                            <div className="source-content">
+
+                                <h3>
+                                    {index === 0
+                                        ? "Professional Profile"
+                                        : index === 1
+                                        ? "Technical Skills"
+                                        : "Learning & Experience"}
+                                </h3>
+
+                                <p>
+                                    {preview}
+                                </p>
+
+                            </div>
+
+                            <div className="source-footer">
+                                <span>
+                                    VertexLearn Knowledge Base
+                                </span>
+
+                                <span className="source-arrow">
+                                    ↗
+                                </span>
+                            </div>
+
+                        </div>
+                    );
+                })}
+
+                    </div>
+                </div>
+            )}
+
+            {/* Empty State */}
+            {!answer && !loading && !error && (
+                <div className="ai-empty">
+
+                    <div className="empty-orb">
+                        ✦
+                    </div>
+
+                    <h3>What would you like to learn?</h3>
+
+                    <p>
+                        Ask a question about the current lecture
+                        and let VertexLearn AI help you understand it.
+                    </p>
+
+                    <div className="suggestions">
+
+                        <button
+                            onClick={() =>
+                                setQuestion(
+                                    "Explain the main concepts of this lecture."
+                                )
+                            }
+                        >
+                            Explain this lecture
+                        </button>
+
+                        <button
+                            onClick={() =>
+                                setQuestion(
+                                    "Give me a simple summary of this lecture."
+                                )
+                            }
+                        >
+                            Summarize this lecture
+                        </button>
+
+                        <button
+                            onClick={() =>
+                                setQuestion(
+                                    "Give me some important questions from this lecture."
+                                )
+                            }
+                        >
+                            Important questions
+                        </button>
+
+                    </div>
+
+                </div>
+            )}
+
+        </section>
     );
 }
 
