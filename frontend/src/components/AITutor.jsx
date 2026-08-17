@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import "./AITutor.css";
 
@@ -6,8 +6,96 @@ function AITutor({ courseId, lectureId }) {
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [sources, setSources] = useState([]);
+    const [history, setHistory] = useState([]);
+    const [historyLoading, setHistoryLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const tutorRef = useRef(null);
+
+    useEffect(() => {
+    const fetchHistory = async () => {
+        if (!courseId || !lectureId) return;
+
+        setHistoryLoading(true);
+
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(
+                `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to load AI history."
+                );
+            }
+
+            setHistory(data.history || []);
+        } catch (err) {
+            console.error("AI History Error:", err);
+        } finally {
+            setHistoryLoading(false);
+        }
+    };
+
+    fetchHistory();
+}, [courseId, lectureId]);
+
+    const clearHistory = async () => {
+    if (!courseId || !lectureId || history.length === 0) {
+        return;
+    }
+
+    const confirmed = window.confirm(
+        "Are you sure you want to clear your AI conversation history for this lecture?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+            `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || "Unable to clear conversation history."
+            );
+        }
+
+        setHistory([]);
+        setAnswer("");
+        setSources([]);
+
+    } catch (err) {
+        console.error("Clear History Error:", err);
+
+        setError(
+            err.message || "Unable to clear conversation history."
+        );
+    }
+};
 
     const askQuestion = async () => {
     if (!question.trim()) {
@@ -59,6 +147,17 @@ function AITutor({ courseId, lectureId }) {
         setAnswer(data.answer || "");
         setSources(data.sources || []);
 
+        setHistory((prev) => [
+    {
+        _id: Date.now().toString(),
+        question: question.trim(),
+        answer: data.answer || "",
+        sources: data.sources || [],
+        createdAt: new Date().toISOString(),
+    },
+    ...prev,
+]);
+
     } catch (err) {
         console.error("AI Tutor Error:", err);
         setError(err.message || "AI service request failed.");
@@ -74,7 +173,7 @@ function AITutor({ courseId, lectureId }) {
     };
 
     return (
-        <section className="ai-tutor-wrapper">
+        <section className="ai-tutor-wrapper" ref={tutorRef}>
 
             {/* Header */}
             <div className="ai-header">
@@ -289,8 +388,107 @@ function AITutor({ courseId, lectureId }) {
                 </div>
             )}
 
+            {/* Conversation History */}
+            {history.length > 0 && !historyLoading && (
+                <div className="history-section">
+
+                    <div className="section-heading">
+                        <div className="heading-icon">
+                            ◷
+                        </div>
+
+                        <div>
+                            <span>PREVIOUS CONVERSATIONS</span>
+                            <div className="history-title-row">
+                        <div>
+                            <span>PREVIOUS CONVERSATIONS</span>
+                            <h2>Conversation History</h2>
+                        </div>
+
+                        <div className="history-actions">
+
+                        <span className="history-count">
+                            {history.length}{" "}
+                            {history.length === 1 ? "conversation" : "conversations"}
+                        </span>
+
+                        <button
+                            className="clear-history-button"
+                            onClick={clearHistory}
+                            disabled={history.length === 0}
+                        >
+                            Clear History
+                        </button>
+
+                    </div>
+                    </div>
+                        </div>
+                    </div>
+
+                    <div className="history-list">
+
+                        {history.map((chat, index) => (
+                        <div
+                            className="history-card"
+                            key={chat._id || index}
+                            onClick={() => {
+                            setQuestion(chat.question || "");
+                            setAnswer(chat.answer || "");
+                            setSources(chat.sources || []);
+
+                            tutorRef.current?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                            });
+                       }}
+                        >
+                        <div className="history-card-top">
+
+                            <span className="history-number">
+                                {String(index + 1).padStart(2, "0")}
+                            </span>
+
+                            <span className="history-date">
+                                {chat.createdAt
+                                    ? new Date(chat.createdAt).toLocaleString()
+                                    : ""}
+                            </span>
+
+                        </div>
+
+                        <div className="history-question">
+                            <span className="history-label">
+                                YOU
+                            </span>
+
+                            <p>{chat.question}</p>
+                        </div>
+
+                        <div className="history-preview">
+                            <span className="history-label">
+                                AI TUTOR
+                            </span>
+
+                            <p>
+                                {chat.answer?.length > 180
+                                    ? `${chat.answer.substring(0, 180)}...`
+                                    : chat.answer}
+                            </p>
+                        </div>
+
+                        <div className="history-open">
+                            View conversation →
+                        </div>
+                    </div>
+                ))}
+
+                </div>
+
+            </div>
+        )}
+
             {/* Empty State */}
-            {!answer && !loading && !error && (
+            {!answer && !loading && !error && history.length === 0 && (
                 <div className="ai-empty">
 
                     <div className="empty-orb">

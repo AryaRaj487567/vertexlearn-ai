@@ -7,6 +7,7 @@ const authMiddleware = require("../../middleware/auth.middleware");
 const {
     chat,
     getChatHistory,
+    clearHistory,
 } = require("./ai.controller");
 
 
@@ -22,5 +23,10 @@ router.get(
     getChatHistory
 );
 
+router.delete(
+    "/history",
+    authMiddleware,
+    clearHistory
+);
 
 module.exports = router;

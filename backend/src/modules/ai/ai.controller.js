@@ -110,51 +110,69 @@ const getChatHistory = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const page = Math.max(
-            parseInt(req.query.page) || 1,
-            1
-        );
+        const { course_id, lecture_id } = req.query;
 
-        const limit = Math.min(
-            Math.max(
-                parseInt(req.query.limit) || 10,
-                1
-            ),
-            50
-        );
+        const filter = {
+            user: userId,
+        };
 
-        const skip = (page - 1) * limit;
+        if (course_id) {
+            filter.course = course_id;
+        }
 
-        const [chats, total] = await Promise.all([
-            Chat.find({ user: userId })
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit),
+        if (lecture_id) {
+            filter.lecture = lecture_id;
+        }
 
-            Chat.countDocuments({
-                user: userId,
-            }),
-        ]);
+        const history = await Chat.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(20);
 
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit),
-            count: chats.length,
-            chats,
+            history,
+        });
+    } catch (error) {
+        console.error("AI HISTORY ERROR:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Unable to fetch AI conversation history.",
+        });
+    }
+};
+
+const clearHistory = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const { course_id, lecture_id } = req.query;
+
+        if (!course_id || !lecture_id) {
+            return res.status(400).json({
+                success: false,
+                message: "course_id and lecture_id are required.",
+            });
+        }
+
+        const result = await Chat.deleteMany({
+            user: userId,
+            course: course_id,
+            lecture: lecture_id,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Conversation history cleared successfully.",
+            deletedCount: result.deletedCount,
         });
 
     } catch (error) {
-        console.error(
-            "Get Chat History Error:",
-            error.message
-        );
+        console.error("CLEAR HISTORY ERROR:", error);
 
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
-            message: "Failed to fetch chat history",
+            message: "Unable to clear conversation history.",
         });
     }
 };
@@ -163,4 +181,5 @@ const getChatHistory = async (req, res) => {
 module.exports = {
     chat,
     getChatHistory,
+    clearHistory,
 };
