@@ -172,6 +172,59 @@ function AITutor({ courseId, lectureId }) {
         }
     };
 
+    const handleClearHistory = async () => {
+    const confirmed = window.confirm(
+        "Are you sure you want to clear your conversation history?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+            `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || "Failed to clear history"
+            );
+        }
+
+        // Clear history from UI
+        setHistory([]);
+
+        // Clear current AI response
+        setQuestion("");
+        setAnswer("");
+        setSources([]);
+
+        // Clear any previous error
+        setError("");
+
+        console.log(
+            "History cleared:",
+            data.deletedCount
+        );
+
+    } catch (err) {
+        console.error("Clear history error:", err);
+
+        setError(
+            err.message || "Failed to clear conversation history"
+        );
+    }
+};
+
     return (
         <section className="ai-tutor-wrapper" ref={tutorRef}>
 
@@ -413,9 +466,8 @@ function AITutor({ courseId, lectureId }) {
                         </span>
 
                         <button
-                            className="clear-history-button"
-                            onClick={clearHistory}
-                            disabled={history.length === 0}
+                            className="clear-history"
+                            onClick={handleClearHistory}
                         >
                             Clear History
                         </button>
