@@ -351,6 +351,47 @@ function AITutor({ courseId, lectureId }) {
             )}
 
             {/* Answer */}
+
+            {/* AI Loading State */}
+                {loading && (
+                    <div className="answer-section loading-section">
+
+                        <div className="section-heading">
+                            <div className="heading-icon loading-icon">
+                                ✦
+                            </div>
+
+                            <div>
+                                <span>VERTEXLEARN AI</span>
+                                <h2>Thinking...</h2>
+                            </div>
+                        </div>
+
+                        <div className="loading-card">
+
+                            <div className="loading-orb">
+                                ✦
+                            </div>
+
+                            <div className="loading-content">
+                                <h3>Thinking about your question...</h3>
+
+                                <p>
+                                    Searching the course material and preparing an answer.
+                                </p>
+
+                                <div className="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                )}
+
             {answer && !loading && (
                 <div className="answer-section">
 
@@ -579,13 +620,10 @@ function AITutor({ courseId, lectureId }) {
                             setSources(chat.sources || []);
                             setError("");
 
-                            // Scroll back to the AI Tutor
-                            setTimeout(() => {
-                                tutorRef.current?.scrollIntoView({
-                                    behavior: "smooth",
-                                    block: "start",
-                                });
-                            }, 50);
+                            window.scrollTo({
+                                top: 0,
+                                behavior: "smooth",
+                            });
                         };
 
                         const answerPreview =
@@ -607,8 +645,11 @@ function AITutor({ courseId, lectureId }) {
 
                                     <span className="history-date">
                                         {chat.createdAt
-                                            ? new Date(chat.createdAt).toLocaleString()
-                                            : ""}
+                                        ? new Date(chat.createdAt).toLocaleString([], {
+                                            dateStyle: "medium",
+                                            timeStyle: "short",
+                                        })
+                                        : ""}
                                     </span>
 
                                 </div>

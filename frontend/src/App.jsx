@@ -97,10 +97,53 @@ function App() {
                         Login
                     </button>
 
-                    {error && (
-                        <p className="login-error">
-                            {error}
-                        </p>
+                    {error && !loading && (
+                        <div className="ai-error-section">
+
+                            <div className="section-heading">
+
+                                <div className="heading-icon error-icon">
+                                    !
+                                </div>
+
+                                <div>
+                                    <span>VERTEXLEARN AI</span>
+                                    <h2>Something went wrong</h2>
+                                </div>
+
+                            </div>
+
+                            <div className="error-card">
+
+                                <div className="error-card-icon">
+                                    !
+                                </div>
+
+                                <div className="error-card-content">
+
+                                    <h3>
+                                        We couldn't generate an answer
+                                    </h3>
+
+                                    <p>
+                                        {error}
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        className="retry-button"
+                                        onClick={handleAskAI}
+                                        disabled={!question.trim()}
+                                    >
+                                        Try Again
+                                        <span>↻</span>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     )}
 
                 </div>
