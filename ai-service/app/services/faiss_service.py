@@ -3,9 +3,32 @@ import numpy as np
 import pickle
 import os
 
+
 VECTOR_FOLDER = "vectors"
 
 os.makedirs(VECTOR_FOLDER, exist_ok=True)
+
+
+def get_lecture_paths(course_id, lecture_id):
+    course_folder = os.path.join(
+        VECTOR_FOLDER,
+        str(course_id)
+    )
+
+    os.makedirs(course_folder, exist_ok=True)
+
+    index_path = os.path.join(
+        course_folder,
+        f"{lecture_id}.faiss"
+    )
+
+    chunks_path = os.path.join(
+        course_folder,
+        f"{lecture_id}.pkl"
+    )
+
+    return index_path, chunks_path
+
 
 def save_embeddings(
     chunks,
@@ -13,6 +36,11 @@ def save_embeddings(
     course_id,
     lecture_id
 ):
+
+    index_path, chunks_path = get_lecture_paths(
+        course_id,
+        lecture_id
+    )
 
     dimension = embeddings.shape[1]
 
@@ -24,10 +52,7 @@ def save_embeddings(
 
     faiss.write_index(
         index,
-        os.path.join(
-            VECTOR_FOLDER,
-            "course_index.faiss"
-        )
+        index_path
     )
 
     metadata = []
@@ -41,10 +66,7 @@ def save_embeddings(
         })
 
     with open(
-        os.path.join(
-            VECTOR_FOLDER,
-            "chunks.pkl"
-        ),
+        chunks_path,
         "wb"
     ) as file:
 

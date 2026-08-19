@@ -4,19 +4,7 @@ import numpy as np
 import os
 
 from app.services.embedding_service import model
-
-
-VECTOR_FOLDER = "vectors"
-
-INDEX_PATH = os.path.join(
-    VECTOR_FOLDER,
-    "course_index.faiss"
-)
-
-CHUNKS_PATH = os.path.join(
-    VECTOR_FOLDER,
-    "chunks.pkl"
-)
+from app.services.faiss_service import get_lecture_paths
 
 
 def search_chunks(
@@ -26,27 +14,41 @@ def search_chunks(
     lecture_id: str | None = None
 ):
 
-    if not os.path.exists(INDEX_PATH):
-        raise FileNotFoundError("FAISS index not found")
+    if not course_id:
+        raise ValueError(
+            "course_id is required for lecture-specific search"
+        )
 
-    if not os.path.exists(CHUNKS_PATH):
-        raise FileNotFoundError("Chunks file not found")
+    if not lecture_id:
+        raise ValueError(
+            "lecture_id is required for lecture-specific search"
+        )
 
-    index = faiss.read_index(INDEX_PATH)
+    index_path, chunks_path = get_lecture_paths(
+        course_id,
+        lecture_id
+    )
 
-    with open(CHUNKS_PATH, "rb") as file:
+    if not os.path.exists(index_path):
+        raise FileNotFoundError(
+            "No vector index found for this lecture"
+        )
+
+    if not os.path.exists(chunks_path):
+        raise FileNotFoundError(
+            "No chunks found for this lecture"
+        )
+
+    index = faiss.read_index(index_path)
+
+    with open(chunks_path, "rb") as file:
         chunks = pickle.load(file)
 
-        print("========== FAISS DEBUG ==========")
-        print("Requested course_id:", course_id)
-        print("Requested lecture_id:", lecture_id)
-        print("Total stored chunks:", len(chunks))
-
-        if len(chunks) > 0:
-            print("First stored metadata:")
-            print(chunks[0])
-
-        print("=================================")
+    print("========== FAISS DEBUG ==========")
+    print("Course ID:", course_id)
+    print("Lecture ID:", lecture_id)
+    print("Stored chunks:", len(chunks))
+    print("=================================")
 
     query_embedding = model.encode(
         [query],
@@ -57,11 +59,9 @@ def search_chunks(
         query_embedding
     ).astype("float32")
 
-    # Search more candidates because some may
-    # belong to other courses/lectures.
     search_k = min(
         index.ntotal,
-        max(top_k * 10, 50)
+        max(top_k, 1)
     )
 
     distances, indices = index.search(
@@ -73,59 +73,19 @@ def search_chunks(
 
     for distance, index_position in zip(
         distances[0],
-        indices[0],
+        indices[0]
     ):
-
-        print("========== SEARCH RESULTS ==========")
-        print("FAISS indices:", indices[0])
-        print("FAISS distances:", distances[0])
-        print("====================================")
 
         if index_position == -1:
             continue
 
         metadata = chunks[index_position]
-        print("Checking metadata:")
-        print(metadata)
-        print("Course match:", metadata.get("course_id") == course_id)
-        print("Requested lecture_id:", repr(lecture_id))
-        print("Stored lecture_id:", repr(metadata.get("lecture_id")))
-
-        print(
-            "Requested lecture_id length:",
-            len(lecture_id) if lecture_id else None
-        )
-
-        print(
-            "Stored lecture_id length:",
-            len(metadata.get("lecture_id"))
-            if metadata.get("lecture_id")
-            else None
-        )
-
-        print(
-            "Lecture match:",
-            metadata.get("lecture_id") == lecture_id
-        )
-
-        # Filter by course if provided
-        if course_id is not None:
-            if metadata.get("course_id") != course_id:
-                continue
-
-        # Filter by lecture if provided
-        if lecture_id is not None:
-            if metadata.get("lecture_id") != lecture_id:
-                continue
 
         results.append({
             "chunk": metadata["chunk"],
-            "course_id": metadata.get("course_id"),
-            "lecture_id": metadata.get("lecture_id"),
+            "course_id": metadata["course_id"],
+            "lecture_id": metadata["lecture_id"],
             "distance": float(distance)
         })
-
-        if len(results) >= top_k:
-            break
 
     return results
