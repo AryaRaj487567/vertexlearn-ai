@@ -206,3 +206,804 @@ body {
     border-right-color: var(--border);
   }
 }
+
+/* =========================================================
+   STEP 9 — CONVERSATION HISTORY
+   ========================================================= */
+
+.history-section {
+    margin-top: 90px;
+    width: 100%;
+}
+
+.history-section .section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 34px;
+}
+
+.history-section .heading-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(99, 102, 241, 0.25),
+        rgba(79, 70, 229, 0.12)
+    );
+
+    border: 1px solid rgba(129, 140, 248, 0.18);
+
+    color: #a78bfa;
+    font-size: 22px;
+
+    box-shadow:
+        0 10px 30px rgba(79, 70, 229, 0.12);
+}
+
+.history-title-row {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+.history-title-row > div:first-child span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #8b92ff;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.history-title-row h2 {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: clamp(28px, 3vw, 38px);
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: -0.8px;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.history-count {
+    color: #8b9bc5;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+}
+
+/* -------------------------
+   Action buttons
+   ------------------------- */
+
+.new-conversation-button,
+.clear-history-button {
+    height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.new-conversation-button {
+    color: #c4b5fd;
+
+    background: rgba(99, 102, 241, 0.08);
+
+    border: 1px solid rgba(129, 140, 248, 0.38);
+}
+
+.new-conversation-button:hover {
+    transform: translateY(-2px);
+
+    background: rgba(99, 102, 241, 0.16);
+
+    border-color: rgba(139, 92, 246, 0.75);
+
+    box-shadow:
+        0 8px 24px rgba(99, 102, 241, 0.14);
+}
+
+.clear-history-button {
+    color: #f87171;
+
+    background: rgba(239, 68, 68, 0.05);
+
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.clear-history-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    background: rgba(239, 68, 68, 0.10);
+
+    border-color: rgba(248, 113, 113, 0.65);
+
+    box-shadow:
+        0 8px 24px rgba(239, 68, 68, 0.10);
+}
+
+.clear-history-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* -------------------------
+   History list
+   ------------------------- */
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* -------------------------
+   History card
+   ------------------------- */
+
+.history-card {
+    position: relative;
+
+    width: 100%;
+
+    padding: 28px 30px 24px;
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(99, 102, 241, 0.08),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            #1d2944,
+            #17223a
+        );
+
+    border: 1px solid rgba(129, 140, 248, 0.18);
+
+    box-shadow:
+        0 18px 45px rgba(2, 6, 23, 0.18);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(129, 140, 248, 0.42);
+
+    box-shadow:
+        0 24px 55px rgba(2, 6, 23, 0.28);
+}
+
+/* -------------------------
+   Card top
+   ------------------------- */
+
+.history-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.history-number {
+    min-width: 42px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    color: #a5b4fc;
+
+    background: rgba(99, 102, 241, 0.13);
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.history-date {
+    color: #7890bd;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+}
+
+/* -------------------------
+   User question
+   ------------------------- */
+
+.history-question {
+    padding: 24px 25px;
+
+    margin-bottom: 16px;
+
+    border-radius: 17px;
+
+    background: #0d172d;
+
+    border: 1px solid rgba(129, 140, 248, 0.10);
+}
+
+.history-label {
+    display: block;
+
+    margin-bottom: 11px;
+
+    color: #9b8cff;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.history-question p {
+    margin: 0;
+
+    color: #f1f5ff;
+
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* -------------------------
+   AI preview
+   ------------------------- */
+
+.history-preview {
+    padding: 22px 25px;
+
+    border-radius: 17px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(148, 163, 184, 0.09);
+}
+
+.history-preview-text {
+    color: #aebddd;
+
+    font-size: 15px;
+    line-height: 1.7;
+
+    max-height: 95px;
+    overflow: hidden;
+
+    position: relative;
+}
+
+/* Keep markdown from creating huge spacing */
+
+.history-preview-text p {
+    margin: 0 0 8px;
+}
+
+.history-preview-text p:last-child {
+    margin-bottom: 0;
+}
+
+.history-preview-text ul,
+.history-preview-text ol {
+    margin: 8px 0;
+    padding-left: 22px;
+}
+
+.history-preview-text h1,
+.history-preview-text h2,
+.history-preview-text h3 {
+    margin: 8px 0;
+    color: #d8d5ff;
+}
+
+.history-preview-text code {
+    padding: 2px 6px;
+
+    border-radius: 5px;
+
+    background: rgba(99, 102, 241, 0.12);
+
+    color: #c4b5fd;
+
+    font-size: 0.9em;
+}
+
+/* -------------------------
+   View conversation
+   ------------------------- */
+
+.history-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: 100%;
+
+    margin-top: 20px;
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 11px;
+
+    background: transparent;
+
+    color: #a78bfa;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        gap 0.2s ease;
+}
+
+.history-open:hover {
+    background: rgba(99, 102, 241, 0.08);
+
+    color: #c4b5fd;
+
+    gap: 14px;
+}
+
+.history-open span {
+    font-size: 18px;
+
+    transition: transform 0.2s ease;
+}
+
+.history-open:hover span {
+    transform: translateX(3px);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .history-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .history-count {
+        margin-right: 5px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .history-section {
+        margin-top: 65px;
+    }
+
+    .history-section .section-heading {
+        gap: 13px;
+        margin-bottom: 25px;
+    }
+
+    .history-section .heading-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        font-size: 18px;
+    }
+
+    .history-title-row h2 {
+        font-size: 28px;
+    }
+
+    .history-actions {
+        gap: 8px;
+    }
+
+    .new-conversation-button,
+    .clear-history-button {
+        flex: 1;
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    .history-card {
+        padding: 21px 18px 18px;
+        border-radius: 18px;
+    }
+
+    .history-card-top {
+        margin-bottom: 17px;
+    }
+
+    .history-question,
+    .history-preview {
+        padding: 18px;
+    }
+
+    .history-question p {
+        font-size: 15px;
+    }
+
+    .history-preview-text {
+        font-size: 14px;
+    }
+
+    .history-date {
+        font-size: 10px;
+        text-align: right;
+    }
+}
+
+/* Step 9 final history-card polish */
+
+.history-card {
+    padding: 24px 28px 18px;
+}
+
+.history-question {
+    padding: 18px 22px;
+}
+
+.history-preview {
+    padding: 18px 22px;
+}
+
+.history-open {
+    width: fit-content;
+    margin: 14px auto 0;
+    padding: 9px 16px;
+    border-radius: 9px;
+}
+
+.history-question p {
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+.history-preview-text {
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* =========================================================
+   STEP 9 — RESPONSIVE AI TUTOR POLISH
+   ========================================================= */
+
+/* ---------- Tablet / smaller laptop ---------- */
+
+@media (max-width: 1100px) {
+
+    .history-section,
+    .sources-section,
+    .answer-section {
+        width: 100%;
+    }
+
+    .history-title-row {
+        gap: 20px;
+    }
+
+    .history-actions {
+        gap: 8px;
+    }
+
+    .sources-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 800px) {
+
+    .history-section {
+        margin-top: 65px;
+    }
+
+    .section-heading {
+        gap: 14px;
+    }
+
+    .history-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .history-count {
+        margin-right: auto;
+    }
+
+    .sources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .source-card {
+        width: 100%;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 600px) {
+
+    .app {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* AI Tutor outer spacing */
+
+    .ai-tutor-wrapper {
+        width: calc(100% - 24px);
+        margin: 24px auto;
+        padding: 24px 16px;
+
+        border-radius: 20px;
+    }
+
+    /* Main tutor heading */
+
+    .tutor-header {
+        gap: 14px;
+    }
+
+    .tutor-header h1 {
+        font-size: 32px;
+    }
+
+    .tutor-header p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* New conversation button */
+
+    .new-conversation-button {
+        font-size: 12px;
+        padding: 0 13px;
+        height: 38px;
+    }
+
+    /* Section headings */
+
+    .section-heading {
+        gap: 12px;
+    }
+
+    .heading-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+    }
+
+    .section-heading span {
+        font-size: 11px;
+        letter-spacing: 1.4px;
+    }
+
+    .section-heading h2 {
+        font-size: 27px;
+    }
+
+    /* Question card */
+
+    .question-card {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .question-card textarea {
+        min-height: 170px;
+        font-size: 15px;
+    }
+
+    .question-actions {
+        gap: 10px;
+    }
+
+    .ask-button {
+        padding: 0 18px;
+        height: 44px;
+    }
+
+    /* Answer */
+
+    .answer-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .answer-card p {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .answer-card ul,
+    .answer-card ol {
+        padding-left: 22px;
+    }
+
+    /* Sources */
+
+    .sources-section {
+        margin-top: 60px;
+    }
+
+    .sources-grid {
+        gap: 16px;
+    }
+
+    .source-card {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .source-content h3 {
+        font-size: 18px;
+    }
+
+    .source-content p {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    /* Conversation History */
+
+    .history-section {
+        margin-top: 60px;
+    }
+
+    .history-section .section-heading {
+        margin-bottom: 24px;
+    }
+
+    .history-title-row h2 {
+        font-size: 27px;
+    }
+
+    .history-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .history-count {
+        grid-column: 1 / -1;
+    }
+
+    .new-conversation-button,
+    .clear-history-button {
+        width: 100%;
+    }
+
+    .history-card {
+        padding: 20px 16px 16px;
+        border-radius: 18px;
+    }
+
+    .history-question,
+    .history-preview {
+        padding: 17px;
+    }
+
+    .history-question p {
+        font-size: 15px;
+    }
+
+    .history-preview-text {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .history-date {
+        font-size: 10px;
+    }
+
+    .history-open {
+        font-size: 13px;
+    }
+}
+
+
+/* ---------- Very small phones ---------- */
+
+@media (max-width: 400px) {
+
+    .ai-tutor-wrapper {
+        width: calc(100% - 16px);
+        padding: 20px 13px;
+    }
+
+    .tutor-header h1 {
+        font-size: 28px;
+    }
+
+    .section-heading h2 {
+        font-size: 24px;
+    }
+
+    .history-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .history-count {
+        grid-column: auto;
+    }
+
+    .question-card textarea {
+        min-height: 145px;
+    }
+
+    .ask-button {
+        width: 100%;
+    }
+}
