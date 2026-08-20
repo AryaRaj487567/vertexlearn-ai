@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import AITutor from "./components/AITutor";
+import LandingPage from "./pages/landingpage";
 
 function App() {
     const [email, setEmail] = useState("");
@@ -56,109 +57,163 @@ function App() {
     };
 
     return (
-        <div className="app">
+        // <div className="app">
 
-            {/* Header */}
-            <header className="app-header">
-                <h1>VertexLearn</h1>
+        //     {/* Header */}
+        //    <header className="app-header">
 
-                <p>
-                    AI-Powered Learning Platform
-                </p>
-            </header>
+        //             <div className="app-nav">
+
+        //                 <div className="brand">
+        //                     <div className="brand-icon">
+        //                         ✦
+        //                     </div>
+
+        //                     <span>
+        //                         Vertex<span>Portal</span>
+        //                     </span>
+        //                 </div>
+
+        //                 <nav className="nav-links">
+
+        //                     <a href="#">
+        //                         ◉ Courses
+        //                     </a>
+
+        //                     <a href="#">
+        //                         &lt;/&gt; Playground
+        //                     </a>
+
+        //                 </nav>
+
+        //                 <div className="nav-actions">
+
+        //                     <button
+        //                         type="button"
+        //                         className="theme-button"
+        //                         aria-label="Toggle theme"
+        //                     >
+        //                         ☼
+        //                     </button>
+
+        //                     {!token && (
+        //                         <>
+        //                             <button
+        //                                 type="button"
+        //                                 className="login-nav-button"
+        //                             >
+        //                                 Log in
+        //                             </button>
+
+        //                             <button
+        //                                 type="button"
+        //                                 className="signup-nav-button"
+        //                             >
+        //                                 Sign up
+        //                             </button>
+        //                         </>
+        //                     )}
+
+        //                 </div>
+
+        //             </div>
+
+        //         </header>
 
 
-            {/* Login */}
-            {!token ? (
+        //     {/* Login */}
+        //     {!token ? (
 
-                <div className="login-container">
+        //         <div className="login-container">
 
-                    <h2>Login</h2>
+        //             <h2>Login</h2>
 
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                    />
+        //             <input
+        //                 type="email"
+        //                 placeholder="Email"
+        //                 value={email}
+        //                 onChange={(e) =>
+        //                     setEmail(e.target.value)
+        //                 }
+        //             />
 
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(e.target.value)
-                        }
-                    />
+        //             <input
+        //                 type="password"
+        //                 placeholder="Password"
+        //                 value={password}
+        //                 onChange={(e) =>
+        //                     setPassword(e.target.value)
+        //                 }
+        //             />
 
-                    <button onClick={login}>
-                        Login
-                    </button>
+        //             <button onClick={login}>
+        //                 Login
+        //             </button>
 
-                    {error && !loading && (
-                        <div className="ai-error-section">
+        //             {error && !loading && (
+        //                 <div className="ai-error-section">
 
-                            <div className="section-heading">
+        //                     <div className="section-heading">
 
-                                <div className="heading-icon error-icon">
-                                    !
-                                </div>
+        //                         <div className="heading-icon error-icon">
+        //                             !
+        //                         </div>
 
-                                <div>
-                                    <span>VERTEXLEARN AI</span>
-                                    <h2>Something went wrong</h2>
-                                </div>
+        //                         <div>
+        //                             <span>VERTEXLEARN AI</span>
+        //                             <h2>Something went wrong</h2>
+        //                         </div>
 
-                            </div>
+        //                     </div>
 
-                            <div className="error-card">
+        //                     <div className="error-card">
 
-                                <div className="error-card-icon">
-                                    !
-                                </div>
+        //                         <div className="error-card-icon">
+        //                             !
+        //                         </div>
 
-                                <div className="error-card-content">
+        //                         <div className="error-card-content">
 
-                                    <h3>
-                                        We couldn't generate an answer
-                                    </h3>
+        //                             <h3>
+        //                                 We couldn't generate an answer
+        //                             </h3>
 
-                                    <p>
-                                        {error}
-                                    </p>
+        //                             <p>
+        //                                 {error}
+        //                             </p>
 
-                                    <button
-                                        type="button"
-                                        className="retry-button"
-                                        onClick={handleAskAI}
-                                        disabled={!question.trim()}
-                                    >
-                                        Try Again
-                                        <span>↻</span>
-                                    </button>
+        //                             <button
+        //                                 type="button"
+        //                                 className="retry-button"
+        //                                 onClick={handleAskAI}
+        //                                 disabled={!question.trim()}
+        //                             >
+        //                                 Try Again
+        //                                 <span>↻</span>
+        //                             </button>
 
-                                </div>
+        //                         </div>
 
-                            </div>
+        //                     </div>
 
-                        </div>
-                    )}
+        //                 </div>
+        //             )}
 
-                </div>
+        //         </div>
 
-            ) : (
+        //     ) : (
 
-                /* AI Tutor */
-                <AITutor
-                    courseId="6a677a2cbf246ea0b506a8bb"
-                    lectureId="6a69a72039babcbd81eccf7c"
-                />
+        //         /* AI Tutor */
+        //         <AITutor
+        //             courseId="6a677a2cbf246ea0b506a8bb"
+        //             lectureId="6a69a72039babcbd81eccf7c"
+        //         />
 
-            )}
+        //     )}
 
-        </div>
+        // </div>
+
+        <LandingPage />
     );
 }
 
