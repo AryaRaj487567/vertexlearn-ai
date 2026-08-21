@@ -1,7 +1,10 @@
+import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
 import AITutor from "./components/AITutor";
 import LandingPage from "./pages/landingpage";
+import Courses from "./pages/Courses";
+import CourseDetails from "./pages/CourseDetails";
 
 function App() {
     const [email, setEmail] = useState("");
@@ -213,7 +216,28 @@ function App() {
 
         // </div>
 
-        <LandingPage />
+         <Routes>
+
+            <Route path="/" element={<LandingPage />} />
+
+            <Route
+                path="/ai-tutor"
+                element={
+                    <AITutor
+                        courseId="6a677a2cbf246ea0b506a8bb"
+                        lectureId="6a69a72039babcbd81eccf7c"
+                    />
+                }
+            />
+
+            <Route path="/courses" element={<Courses />} />
+
+            <Route
+                path="/courses/:courseId"
+                element={<CourseDetails />}
+            />
+
+        </Routes>
     );
 }
 
