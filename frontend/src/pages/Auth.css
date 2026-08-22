@@ -220,3 +220,54 @@
         font-size: 27px;
     }
 }
+
+/* ================= AUTH TEXT FIX ================= */
+
+.auth-page h1,
+.auth-page h2,
+.auth-page h3,
+.auth-page p,
+.auth-page label {
+    color: #ffffff;
+}
+
+.auth-page .auth-subtitle {
+    color: #9aa4c7;
+}
+
+/* Login / Signup headings */
+.auth-page h1 {
+    color: #ffffff !important;
+}
+
+/* Form labels */
+.auth-page label {
+    color: #c9d2f0;
+}
+
+/* Input text */
+.auth-page input {
+    color: #111827;
+    background: #eef4ff;
+}
+
+/* Input placeholder */
+.auth-page input::placeholder {
+    color: #7180a3;
+}
+
+/* Bottom text */
+.auth-page .auth-footer,
+.auth-page .auth-footer p {
+    color: #9aa4c7;
+}
+
+/* Links */
+.auth-page a {
+    color: #a855f7;
+}
+
+/* Error messages, if present */
+.auth-page .error {
+    color: #ff6b6b;
+}
