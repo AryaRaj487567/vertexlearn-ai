@@ -238,7 +238,12 @@ function App() {
 
             <Route
                 path="/ai-tutor"
-                element={<AITutor />}
+                element={
+                    <AITutor
+                        courseId="6a677a2cbf246ea0b506a8bb"
+                        lectureId="6a69a72039babcbd81eccf7c"
+                    />
+                }
             />
 
             <Route
