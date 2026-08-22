@@ -4,6 +4,9 @@ import "./App.css";
 import AITutor from "./components/AITutor";
 import LandingPage from "./pages/landingpage";
 import Courses from "./pages/Courses";
+import Playground from "./pages/Playground";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import CourseDetails from "./pages/CourseDetails";
 
 function App() {
@@ -218,23 +221,39 @@ function App() {
 
          <Routes>
 
-            <Route path="/" element={<LandingPage />} />
-
             <Route
-                path="/ai-tutor"
-                element={
-                    <AITutor
-                        courseId="6a677a2cbf246ea0b506a8bb"
-                        lectureId="6a69a72039babcbd81eccf7c"
-                    />
-                }
+                path="/"
+                element={<LandingPage />}
             />
 
-            <Route path="/courses" element={<Courses />} />
+            <Route
+                path="/courses"
+                element={<Courses />}
+            />
 
             <Route
                 path="/courses/:courseId"
                 element={<CourseDetails />}
+            />
+
+            <Route
+                path="/ai-tutor"
+                element={<AITutor />}
+            />
+
+            <Route
+                path="/playground"
+                element={<Playground />}
+            />
+
+            <Route
+                path="/login"
+                element={<Login />}
+            />
+
+            <Route
+                path="/signup"
+                element={<Signup />}
             />
 
         </Routes>
