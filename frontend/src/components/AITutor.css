@@ -5611,3 +5611,565 @@
         font-size: 14px;
     }
 }
+
+/* =========================================================
+   VERTEXPORTAL AI TUTOR - FINAL UI POLISH
+   ========================================================= */
+
+.ai-tutor-wrapper {
+    width: min(1180px, 94%);
+    max-width: none;
+    margin: 35px auto;
+    padding: 42px;
+    border-radius: 28px;
+
+    background:
+        radial-gradient(
+            circle at 85% 5%,
+            rgba(124, 92, 255, 0.14),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 5% 30%,
+            rgba(99, 102, 241, 0.10),
+            transparent 25%
+        ),
+        linear-gradient(145deg, #101629, #0b1120);
+
+    border: 1px solid rgba(139, 124, 255, 0.16);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.28);
+
+    color: #f8fafc;
+}
+
+
+/* ================= HEADER ================= */
+
+.tutor-header {
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+    margin-bottom: 30px;
+}
+
+.tutor-title {
+    gap: 18px;
+}
+
+.tutor-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #675cff,
+            #9b5cff
+        );
+
+    box-shadow:
+        0 12px 35px rgba(103, 92, 255, 0.30);
+}
+
+.tutor-eyebrow {
+    color: #9d91ff;
+    font-size: 11px;
+    letter-spacing: 2.2px;
+}
+
+.tutor-title h1 {
+    font-size: 40px;
+    letter-spacing: -1px;
+}
+
+.tutor-title p {
+    max-width: 650px;
+    color: #8996b3;
+}
+
+
+/* ================= NEW CONVERSATION ================= */
+
+.new-conversation-top {
+    padding: 12px 18px;
+
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(139, 124, 255, 0.28);
+
+    color: #bdb5ff;
+
+    border-radius: 12px;
+}
+
+.new-conversation-top:hover {
+    background: rgba(124, 92, 255, 0.16);
+    border-color: rgba(139, 124, 255, 0.55);
+
+    box-shadow:
+        0 8px 25px rgba(99, 80, 220, 0.12);
+}
+
+
+/* ================= QUESTION CARD ================= */
+
+.question-card {
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24, 35, 59, 0.95),
+            rgba(15, 24, 43, 0.95)
+        );
+
+    border: 1px solid rgba(139, 124, 255, 0.13);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.16);
+}
+
+.question-top > span:first-child {
+    color: #e9ecf7;
+    font-size: 15px;
+}
+
+.shortcut {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(148, 163, 184, 0.15);
+    color: #7f8ba5;
+}
+
+.question-card textarea {
+    min-height: 145px;
+
+    background: #0b1222;
+
+    border-color: rgba(129, 140, 248, 0.16);
+
+    color: #f8fafc;
+
+    border-radius: 15px;
+}
+
+.question-card textarea:hover {
+    border-color: rgba(129, 140, 248, 0.28);
+}
+
+.question-card textarea:focus {
+    border-color: #7966ff;
+
+    box-shadow:
+        0 0 0 4px rgba(121, 102, 255, 0.10),
+        0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ================= ASK BUTTON ================= */
+
+.ask-button {
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #675cff,
+            #955cff
+        );
+
+    box-shadow:
+        0 10px 25px rgba(103, 92, 255, 0.25);
+}
+
+.ask-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 32px rgba(103, 92, 255, 0.35);
+}
+
+
+/* ================= ERROR ================= */
+
+.ai-error {
+    margin-top: 18px;
+
+    background: rgba(239, 68, 68, 0.07);
+
+    border-color: rgba(239, 68, 68, 0.22);
+
+    color: #fca5a5;
+
+    border-radius: 14px;
+}
+
+
+/* ================= EMPTY STATE ================= */
+
+.ai-empty {
+    margin-top: 35px;
+    padding: 55px 30px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(111, 92, 255, 0.08),
+            transparent 55%
+        ),
+        rgba(20, 30, 51, 0.72);
+
+    border: 1px solid rgba(129, 140, 248, 0.11);
+}
+
+.empty-orb {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #675cff,
+            #9a5cff
+        );
+
+    color: white;
+    font-size: 28px;
+
+    box-shadow:
+        0 15px 40px rgba(103, 92, 255, 0.28);
+}
+
+.ai-empty h3 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+
+    font-size: 22px;
+}
+
+.ai-empty p {
+    max-width: 570px;
+
+    margin: 0 auto;
+
+    color: #8491ad;
+
+    line-height: 1.7;
+}
+
+
+/* ================= SUGGESTIONS ================= */
+
+.suggestions {
+    margin-top: 25px;
+    gap: 10px;
+}
+
+.suggestions button {
+    padding: 10px 16px;
+
+    border-radius: 10px;
+
+    background: rgba(124, 92, 255, 0.06);
+
+    border-color: rgba(139, 124, 255, 0.22);
+
+    color: #a9a1e9;
+}
+
+.suggestions button:hover {
+    background: rgba(124, 92, 255, 0.14);
+
+    border-color: rgba(139, 124, 255, 0.48);
+}
+
+
+/* ================= SECTION HEADINGS ================= */
+
+.section-heading {
+    margin: 42px 0 18px;
+}
+
+.heading-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 13px;
+
+    background: rgba(111, 92, 255, 0.10);
+
+    border: 1px solid rgba(139, 124, 255, 0.12);
+
+    color: #a79cff;
+}
+
+.section-heading span {
+    color: #8f83ff;
+}
+
+.section-heading h2 {
+    font-size: 25px;
+}
+
+
+/* ================= ANSWER ================= */
+
+.answer-card {
+    padding: 32px 35px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(28, 41, 66, 0.98),
+            rgba(19, 29, 49, 0.98)
+        );
+
+    border: 1px solid rgba(129, 140, 248, 0.12);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.15);
+}
+
+.answer-card p {
+    color: #d8e0f2;
+}
+
+.answer-card strong {
+    color: #b9adff;
+}
+
+
+/* ================= SOURCES ================= */
+
+.sources-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.source-card {
+    min-height: 250px;
+
+    padding: 21px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 37, 62, 0.95),
+            rgba(17, 27, 47, 0.98)
+        );
+
+    border-color: rgba(129, 140, 248, 0.12);
+}
+
+.source-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(139, 124, 255, 0.35);
+}
+
+.source-content h3 {
+    font-size: 17px;
+}
+
+.source-content p {
+    color: #8996b3;
+}
+
+
+/* ================= HISTORY ================= */
+
+.history-section {
+    margin-top: 65px;
+}
+
+.history-list {
+    gap: 16px;
+}
+
+.history-card {
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(26, 39, 64, 0.96),
+            rgba(17, 27, 47, 0.98)
+        );
+
+    border-color: rgba(129, 140, 248, 0.10);
+}
+
+.history-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(139, 124, 255, 0.35);
+
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.history-question,
+.history-preview {
+    border-radius: 14px;
+}
+
+.history-question {
+    background: rgba(7, 15, 34, 0.55);
+}
+
+.history-preview {
+    background: rgba(37, 50, 77, 0.50);
+}
+
+.history-question p {
+    font-size: 16px;
+}
+
+.history-preview-text {
+    font-size: 14px;
+}
+
+
+/* ================= HISTORY ACTIONS ================= */
+
+.new-conversation-button {
+    border-radius: 10px;
+
+    background: rgba(99, 102, 241, 0.08);
+
+    color: #aaa2ef;
+}
+
+.clear-history-button {
+    border-radius: 10px;
+}
+
+
+/* ================= LOADING ================= */
+
+.loading-card {
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 37, 61, 0.96),
+            rgba(16, 26, 45, 0.98)
+        );
+
+    border-color: rgba(129, 140, 248, 0.11);
+}
+
+.loading-orb {
+    box-shadow:
+        0 0 40px rgba(111, 92, 255, 0.32);
+}
+
+
+/* ================= MODAL ================= */
+
+.clear-modal {
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b263f,
+            #111a30
+        );
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .ai-tutor-wrapper {
+        width: 94%;
+        padding: 30px;
+    }
+
+    .sources-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tutor-header {
+        align-items: flex-start;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .ai-tutor-wrapper {
+        width: 94%;
+        padding: 22px;
+        margin: 20px auto;
+        border-radius: 20px;
+    }
+
+    .tutor-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tutor-title h1 {
+        font-size: 32px;
+    }
+
+    .new-conversation-top {
+        align-self: flex-start;
+    }
+
+    .question-card {
+        padding: 18px;
+    }
+
+    .question-bottom {
+        gap: 12px;
+    }
+
+    .sources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .answer-card {
+        padding: 24px 20px;
+    }
+
+    .history-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .history-actions {
+        width: 100%;
+    }
+
+    .ai-empty {
+        padding: 40px 20px;
+    }
+}
