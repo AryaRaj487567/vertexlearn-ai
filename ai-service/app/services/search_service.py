@@ -29,6 +29,20 @@ def search_chunks(
         lecture_id
     )
 
+    print("========== VECTOR PATH DEBUG ==========")
+    print("Current working directory:", os.getcwd())
+    print("Index path:", index_path)
+    print("Chunks path:", chunks_path)
+    print("Index exists:", os.path.exists(index_path))
+    print("Chunks exists:", os.path.exists(chunks_path))
+
+    if os.path.exists(os.path.dirname(index_path)):
+        print("Files in course folder:", os.listdir(os.path.dirname(index_path)))
+    else:
+        print("Course folder does not exist")
+
+    print("=======================================")
+
     if not os.path.exists(index_path):
         raise FileNotFoundError(
             "No vector index found for this lecture"
