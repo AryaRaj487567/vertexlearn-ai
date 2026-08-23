@@ -9,28 +9,16 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parents[2]
 VECTOR_FOLDER = BASE_DIR / "vectors"
 
-VECTOR_FOLDER.mkdir(parents=True, exist_ok=True)
-
 
 def get_lecture_paths(course_id, lecture_id):
-    course_folder = os.path.join(
-        VECTOR_FOLDER,
-        str(course_id)
-    )
+    course_folder = VECTOR_FOLDER / str(course_id)
 
-    os.makedirs(course_folder, exist_ok=True)
+    course_folder.mkdir(parents=True, exist_ok=True)
 
-    index_path = os.path.join(
-        course_folder,
-        f"{lecture_id}.faiss"
-    )
+    index_path = course_folder / f"{lecture_id}.faiss"
+    chunks_path = course_folder / f"{lecture_id}.pkl"
 
-    chunks_path = os.path.join(
-        course_folder,
-        f"{lecture_id}.pkl"
-    )
-
-    return index_path, chunks_path
+    return str(index_path), str(chunks_path)
 
 
 def save_embeddings(

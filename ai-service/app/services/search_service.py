@@ -31,6 +31,7 @@ def search_chunks(
 
     print("========== VECTOR PATH DEBUG ==========")
     print("Current working directory:", os.getcwd())
+    print("Vector root:", os.path.abspath("vectors"))
     print("Index path:", index_path)
     print("Chunks path:", chunks_path)
     print("Index exists:", os.path.exists(index_path))
