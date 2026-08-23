@@ -2942,3 +2942,102 @@
         gap: 15px 22px;
     }
 }
+
+/* ================= MOBILE NAVBAR ================= */
+
+@media (max-width: 700px) {
+
+    .landing-navbar {
+        height: auto;
+        padding: 14px 16px;
+    }
+
+    .landing-navbar .landing-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    /* Logo */
+    .landing-navbar .brand {
+        flex: 1;
+    }
+
+    /* Keep navigation visible */
+    .landing-navbar .nav-links {
+        order: 3;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 18px;
+
+        padding-top: 10px;
+        border-top: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .landing-navbar .nav-links a {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    /* Right-side controls */
+    .landing-navbar .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .landing-navbar .login-nav-button {
+        display: inline-flex;
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+
+    .landing-navbar .signup-nav-button {
+        font-size: 13px;
+        padding: 9px 14px;
+    }
+
+    .landing-navbar .theme-button {
+        width: 38px;
+        height: 30px;
+    }
+} 
+
+@media (max-width: 700px) {
+
+    .landing-navbar .landing-container {
+        flex-wrap: wrap;
+    }
+
+    .landing-navbar .nav-links {
+        display: flex;
+        width: 100%;
+        order: 3;
+        justify-content: center;
+        gap: 20px;
+        padding-top: 12px;
+    }
+
+    .landing-navbar .nav-links a {
+        display: inline-flex;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .landing-navbar .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .landing-navbar .login-nav-button {
+        display: inline-flex;
+    }
+}
+
