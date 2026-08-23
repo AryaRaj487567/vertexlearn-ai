@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import os
 
-from app.services.embedding_service import model
+from app.services.embedding_service import get_model
 from app.services.faiss_service import get_lecture_paths
 
 
@@ -50,7 +50,7 @@ def search_chunks(
     print("Stored chunks:", len(chunks))
     print("=================================")
 
-    query_embedding = model.encode(
+    query_embedding = get_model().encode(
         [query],
         convert_to_numpy=True
     )
