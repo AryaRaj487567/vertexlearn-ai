@@ -4,9 +4,12 @@ import pickle
 import os
 
 
-VECTOR_FOLDER = "vectors"
+from pathlib import Path
 
-os.makedirs(VECTOR_FOLDER, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parents[2]
+VECTOR_FOLDER = BASE_DIR / "vectors"
+
+VECTOR_FOLDER.mkdir(parents=True, exist_ok=True)
 
 
 def get_lecture_paths(course_id, lecture_id):
