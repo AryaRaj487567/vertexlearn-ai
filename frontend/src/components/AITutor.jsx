@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import "./AITutor.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function AITutor({ courseId, lectureId }) {
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
@@ -23,7 +25,7 @@ function AITutor({ courseId, lectureId }) {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+                `${API_URL}/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
                 {
                     method: "GET",
                     headers: {
@@ -68,7 +70,7 @@ function AITutor({ courseId, lectureId }) {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+            `${API_URL}/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
             {
                 method: "DELETE",
                 headers: {
@@ -114,8 +116,8 @@ function AITutor({ courseId, lectureId }) {
             throw new Error("Please login first.");
         }
 
-        const response = await fetch(
-            "http://127.0.0.1:5000/api/v1/ai/chat",
+       const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/v1/ai/chat`,
             {
                 method: "POST",
 
@@ -184,7 +186,7 @@ function AITutor({ courseId, lectureId }) {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            `http://localhost:5000/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
+            `${API_URL}/api/v1/ai/history?course_id=${courseId}&lecture_id=${lectureId}`,
             {
                 method: "DELETE",
                 headers: {
